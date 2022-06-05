@@ -1,9 +1,5 @@
 package com.moutamid.billcalculator;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +8,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.moutamid.billcalculator.databinding.ActivityMainBinding;
+
+import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,9 +23,8 @@ public class MainActivity extends AppCompatActivity {
     int tipAmount = 0;
     int splitAmount = 0;
 
-    Button calculateBtn, clearBtn;
-    TextView totalPerPersonTv, totalBillTv, totalTipTv;
-    LinearLayout resultLayout;
+    int tipAmount2 = 0;
+    int splitAmount2 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +33,18 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(b.getRoot());
 
-        calculateBtn = b.calculateBtn;
-        clearBtn = b.clearBtn;
-        totalPerPersonTv = b.totalperpersonTv;
-        totalBillTv = b.totalBillTv;
-        totalTipTv = b.totalTipTv;
-        resultLayout = b.resultLayout;
+        initVerticalLayout();
+        initHorizontalLayout();
+
+    }
+
+    private void initVerticalLayout() {
 
         b.choosetip10.setOnClickListener(view -> {
 
-            b.choosetip10.setBackgroundResource(R.color.grey);
-            b.choosetip15.setBackgroundResource(R.color.purple_500);
-            b.choosetip20.setBackgroundResource(R.color.purple_500);
+            b.choosetip10.setBackgroundColor(getResources().getColor(R.color.grey));
+            b.choosetip15.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip20.setBackgroundColor(getResources().getColor(R.color.purple_500));
 
             tipAmount = 10;
 
@@ -51,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         b.choosetip15.setOnClickListener(view -> {
 
-            b.choosetip10.setBackgroundResource(R.color.purple_500);
-            b.choosetip15.setBackgroundResource(R.color.grey);
-            b.choosetip20.setBackgroundResource(R.color.purple_500);
+            b.choosetip10.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip15.setBackgroundColor(getResources().getColor(R.color.grey));
+            b.choosetip20.setBackgroundColor(getResources().getColor(R.color.purple_500));
 
             tipAmount = 15;
 
@@ -61,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
 
         b.choosetip20.setOnClickListener(view -> {
 
-            b.choosetip10.setBackgroundResource(R.color.purple_500);
-            b.choosetip15.setBackgroundResource(R.color.purple_500);
-            b.choosetip20.setBackgroundResource(R.color.grey);
+            b.choosetip10.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip15.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip20.setBackgroundColor(getResources().getColor(R.color.grey));
 
             tipAmount = 20;
 
@@ -73,17 +74,17 @@ public class MainActivity extends AppCompatActivity {
 
             if (splitAmount != 0) {
                 splitAmount--;
-                b.splitCountTv.setText(splitAmount);
+                b.splitCountTv.setText(splitAmount + "");
             }
 
         });
 
         b.plusBtn.setOnClickListener(view -> {
             splitAmount++;
-            b.splitCountTv.setText(splitAmount);
+            b.splitCountTv.setText(splitAmount + "");
         });
 
-        calculateBtn.setOnClickListener(view -> {
+        b.calculateBtn.setOnClickListener(view -> {
 
             if (b.enteryourbill.getText().toString().isEmpty() || b.enteryourbill.getText().toString().equals("0")) {
                 Toast.makeText(this, "Please enter bill amount!", Toast.LENGTH_SHORT).show();
@@ -106,33 +107,131 @@ public class MainActivity extends AppCompatActivity {
 
             double finalSplitAmount = finalTotalBill / splitAmount;
 
-            totalBillTv.setText("$" + finalTotalBill + "");
+            b.totalBillTv.setText("$" + new DecimalFormat("##.##").format(finalTotalBill) + "");
 
-            totalTipTv.setText("$" + finalTip + "");
+            b.totalTipTv.setText("$" + new DecimalFormat("##.##").format(finalTip) + "");
 
-            totalPerPersonTv.setText("$" + finalSplitAmount + "");
+            b.totalperpersonTv.setText("$" + new DecimalFormat("##.##").format(finalSplitAmount) + "");
 
-            resultLayout.setVisibility(View.VISIBLE);
+            b.resultLayout.setVisibility(View.VISIBLE);
 
         });
 
         b.clearBtn.setOnClickListener(view -> {
             tipAmount = 0;
             splitAmount = 0;
-            b.choosetip10.setBackgroundResource(R.color.purple_500);
-            b.choosetip15.setBackgroundResource(R.color.purple_500);
-            b.choosetip20.setBackgroundResource(R.color.purple_500);
+            b.choosetip10.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip15.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip20.setBackgroundColor(getResources().getColor(R.color.purple_500));
 
             b.enteryourbill.setText("");
             b.splitCountTv.setText("0");
 
-            totalBillTv.setText("$0.0");
+            b.totalBillTv.setText("$0.0");
 
-            totalTipTv.setText("$0.0");
+            b.totalTipTv.setText("$0.0");
 
-            totalPerPersonTv.setText("$0.0");
+            b.totalperpersonTv.setText("$0.0");
 
-            resultLayout.setVisibility(View.GONE);
+            b.resultLayout.setVisibility(View.GONE);
+        });
+
+    }
+
+    private void initHorizontalLayout() {
+
+        b.choosetip102.setOnClickListener(view -> {
+
+            b.choosetip102.setBackgroundColor(getResources().getColor(R.color.grey));
+            b.choosetip152.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip202.setBackgroundColor(getResources().getColor(R.color.purple_500));
+
+            tipAmount2 = 10;
+
+        });
+
+        b.choosetip152.setOnClickListener(view -> {
+
+            b.choosetip102.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip152.setBackgroundColor(getResources().getColor(R.color.grey));
+            b.choosetip202.setBackgroundColor(getResources().getColor(R.color.purple_500));
+
+            tipAmount2 = 15;
+
+        });
+
+        b.choosetip202.setOnClickListener(view -> {
+
+            b.choosetip102.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip152.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip202.setBackgroundColor(getResources().getColor(R.color.grey));
+
+            tipAmount2 = 20;
+
+        });
+
+        b.minusBtn2.setOnClickListener(view -> {
+
+            if (splitAmount2 != 0) {
+                splitAmount2--;
+                b.splitCountTv2.setText(splitAmount2 + "");
+            }
+
+        });
+
+        b.plusBtn2.setOnClickListener(view -> {
+            splitAmount2++;
+            b.splitCountTv2.setText(splitAmount2 + "");
+        });
+
+        b.calculateBtn2.setOnClickListener(view -> {
+
+            if (b.enteryourbill2.getText().toString().isEmpty() || b.enteryourbill2.getText().toString().equals("0")) {
+                Toast.makeText(this, "Please enter bill amount!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (tipAmount2 == 0) {
+                Toast.makeText(this, "Please choose your tip!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (splitAmount2 == 0) {
+                Toast.makeText(this, "Please add split amount!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            double currentBill2 = Double.parseDouble(b.enteryourbill2.getText().toString());
+
+            double finalTip2 = (double) (currentBill2 * (tipAmount2 / 100.0f));
+
+            double finalTotalBill2 = currentBill2 + finalTip2;
+
+            double finalSplitAmount2 = finalTotalBill2 / splitAmount2;
+
+            b.totalBillTv2.setText("$" + new DecimalFormat("##.##").format(finalTotalBill2) + "");
+
+            b.totalTipTv2.setText("$" + new DecimalFormat("##.##").format(finalTip2) + "");
+
+            b.totalperpersonTv2.setText("$" + new DecimalFormat("##.##").format(finalSplitAmount2) + "");
+
+            b.resultLayout2.setVisibility(View.VISIBLE);
+
+        });
+
+        b.clearBtn2.setOnClickListener(view -> {
+            tipAmount2 = 0;
+            splitAmount2 = 0;
+            b.choosetip102.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip152.setBackgroundColor(getResources().getColor(R.color.purple_500));
+            b.choosetip202.setBackgroundColor(getResources().getColor(R.color.purple_500));
+
+            b.enteryourbill2.setText("");
+            b.splitCountTv2.setText("0");
+
+            b.totalBillTv2.setText("$0.0");
+
+            b.totalTipTv2.setText("$0.0");
+
+            b.totalperpersonTv2.setText("$0.0");
         });
 
     }
@@ -143,26 +242,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            b.calculationLayout1.setVisibility(View.GONE);
-            b.calculationLayout2.setVisibility(View.VISIBLE);
-
-            calculateBtn = b.calculateBtn2;
-            clearBtn = b.clearBtn2;
-            totalPerPersonTv = b.totalperpersonTv2;
-            totalBillTv = b.totalBillTv2;
-            totalTipTv = b.totalTipTv2;
-            resultLayout = b.resultLayout;
+            b.potraitLayout.setVisibility(View.GONE);
+            b.landscapeLayout.setVisibility(View.VISIBLE);
 
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            b.calculationLayout2.setVisibility(View.GONE);
-            b.calculationLayout1.setVisibility(View.VISIBLE);
-
-            calculateBtn = b.calculateBtn;
-            clearBtn = b.clearBtn;
-            totalPerPersonTv = b.totalperpersonTv;
-            totalBillTv = b.totalBillTv;
-            totalTipTv = b.totalTipTv;
-            resultLayout = b.resultLayout2;
+            b.potraitLayout.setVisibility(View.VISIBLE);
+            b.landscapeLayout.setVisibility(View.GONE);
         }
     }
 }
